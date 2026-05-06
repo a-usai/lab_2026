@@ -1,4 +1,6 @@
 from sqlmodel import create_engine, SQLModel, Session
+from typing import Annotated
+from fastapi import Depends
 
 sqlite_file_name= "/Users/alessiousai/Desktop/libri/3-SC/Programmazione-Web/lab_2026/app/data/database.db"
 sqlite_url=f"sqlit:///{sqlite_file_name}"
@@ -10,4 +12,10 @@ engine = create_engine(
 
 def init_database():
     SQLModel.metadata.create_all(engine)
+
+def get_session():
+    with Session(engine) as session:
+        yield session
+
+SessionDep: Annotated[Session,Depends(get_session)]
 
