@@ -10,7 +10,7 @@ books_router=APIRouter(prefix="/books", tags=["books"])
 @books_router.get("/")
 def get_all_books(
         #prima session siccome sort ha un parametro di default
-        session=SessionDep,
+        session: SessionDep,
         sort: Annotated[bool,Query(description="Sort books by their review")] = False
 
 ) -> list[BookPublic]:
