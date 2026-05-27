@@ -3,6 +3,7 @@ from typing import Annotated
 from fastapi import Depends
 from schemas.book import BookDB #anche se non la uso
 from schemas.users import UserDB
+from schemas.book_user_link import BookUserLink
 from faker import Faker
 import os
 
@@ -30,6 +31,7 @@ def init_database():
 
                 )
                 session.add(book)
+            session.commit()
             for i in range(10):
                 user= UserDB(
                     name=f.name(), #nome casuale
@@ -38,6 +40,13 @@ def init_database():
 
                 )
                 session.add(user)
+            session.commit()
+            for i in range(10):
+                link= BookUserLink(
+                    book_id=f.pyint(min_value=1, max_value=10),
+                    user_id=f.pyint(min_value=1, max_value=10)
+                )
+                session.add(link)
 
             session.commit()
 

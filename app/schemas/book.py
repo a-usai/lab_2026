@@ -20,4 +20,3 @@ class BookPublic(BookBase):
 class BookDB(BookBase, table=True):
     #impostazione dell'id come chiave primaria
     id: int=Field(default=None, primary_key=True)
-    user_id: int | None = Field(default=None, foreign_key="userdb.id") #collegamento con la tabella userdb

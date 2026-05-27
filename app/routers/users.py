@@ -1,9 +1,9 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, HTTPException
 from data.db import SessionDep
 from schemas.users import UserDB, UserPublic
 from sqlmodel import select
 from schemas.book import BookDB, BookPublic
-
+from schemas.book_user_link import BookUserLink
 users_router= APIRouter(prefix="/users")
 
 @users_router.get("/")
@@ -19,6 +19,9 @@ def get_user_books(
         session: SessionDep
 ) ->list[BookPublic]:
     """Returns all book held by the given user"""
-    statement= select(BookDB).join(UserDB).where(UserDB.id==id) #query da eseguire
+    user=session.get(UserDB, id)
+    if not user:
+        raise HTTPException(404, detail="User not found")
+    statement= select(BookDB).join(BookUserLink).where(BookUserLink.user_id==id) #query da eseguire
     result=session.exec(statement).all() #risultato della query
     return result
