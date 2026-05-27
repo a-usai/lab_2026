@@ -2,6 +2,7 @@ from sqlmodel import create_engine, SQLModel, Session
 from typing import Annotated
 from fastapi import Depends
 from schemas.book import BookDB #anche se non la uso
+from schemas.users import UserDB
 from faker import Faker
 import os
 
@@ -25,9 +26,19 @@ def init_database():
                     title=f.sentence(nb_words=5),
                     author=f.name(),
                     review=f.pyint(min_value=1, max_value=5),
+                    user_id=f.pyint(min_value=1, max_value=10)
 
                 )
                 session.add(book)
+            for i in range(10):
+                user= UserDB(
+                    name=f.name(), #nome casuale
+                    birth_date=f.birth_date(),
+                    city=f.city()
+
+                )
+                session.add(user)
+
             session.commit()
 
 

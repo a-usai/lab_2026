@@ -7,6 +7,7 @@ class BookBase(SQLModel):
     author: str
     review: Annotated[int, Field(ge=1, le=5)] = None
 
+
 #usata nelle post
 class BookCreate(BookBase):
     pass
@@ -19,3 +20,4 @@ class BookPublic(BookBase):
 class BookDB(BookBase, table=True):
     #impostazione dell'id come chiave primaria
     id: int=Field(default=None, primary_key=True)
+    user_id: int | None = Field(default=None, foreign_key="userdb.id") #collegamento con la tabella userdb
